@@ -30,6 +30,7 @@
         .btn-error {
             color: #ef5f5f;
         }
+
     </style>
     <!-- custom style -->
 </head>
@@ -84,23 +85,28 @@
             <div class="col-md-8 card padding-y-sm card ">
                 <ul class="nav bg radius nav-pills nav-fill mb-3 bg" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active show" data-toggle="pill" href="#nav-tab-card">
+                        <a class="nav-link active show" data-toggle="pill" href="/">
                             <i class="fa fa-tags"></i> All</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="pill" href="#nav-tab-paypal">
-                            <i class="fa fa-tags "></i> Category 1</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="pill" href="#nav-tab-bank">
-                            <i class="fa fa-tags "></i> Category 2</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="pill" href="#nav-tab-bank">
-                            <i class="fa fa-tags "></i> Category 3</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="pill" href="#nav-tab-bank">
-                            <i class="fa fa-tags "></i> Category 4</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="pill" href="#nav-tab-bank">
-                            <i class="fa fa-tags "></i> Category 5</a></li>
+                    <li class="nav-item" th:each="category : ${categories}">
+                        <a th:href="@{/forcategory?cat={cat}(cat=${category})}" class="nav-link" data-toggle="pill">
+                            <i class="fa fa-tags" th:text="${category}"></i>
+                        </a>
+                    </li>
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a class="nav-link" data-toggle="pill" href="#nav-tab-paypal">-->
+                    <!--                            <i class="fa fa-tags "></i> Category 1</a></li>-->
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a class="nav-link" data-toggle="pill" href="#nav-tab-bank">-->
+                    <!--                            <i class="fa fa-tags "></i> Category 2</a></li>-->
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a class="nav-link" data-toggle="pill" href="#nav-tab-bank">-->
+                    <!--                            <i class="fa fa-tags "></i> Category 3</a></li>a-->
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a class="nav-link" data-toggle="pill" href="#nav-tab-bank">-->
+                    <!--                            <i class="fa fa-tags "></i> Category 4</a></li>-->
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a class="nav-link" data-toggle="pill" href="#nav-tab-bank">-->
+                    <!--                            <i class="fa fa-tags "></i> Category 5</a></li>-->
                 </ul>
                 <span id="items">
 	<div class="row">
@@ -114,9 +120,10 @@
 		<figcaption class="info-wrap">
 			<a href="#" class="title"><span th:text="${product.name}"></span></a>
 			<div class="action-wrap">
-				<a href="#" class="btn btn-primary btn-sm float-right"> <i class="fa fa-cart-plus"></i> Add </a>
+				<a th:href="@{/add?pid={pid}(pid=${product.id})}" class="btn btn-primary btn-sm float-right"> <i
+                        class="fa fa-cart-plus"></i> Add </a>
 				<div class="price-wrap h5">
-					<span class="price-new">$1280</span>
+					<span class="price-new" th:text="${product.price}"></span>
 				</div> <!-- price-wrap.// -->
 			</div> <!-- action-wrap -->
 		</figcaption>
@@ -152,16 +159,13 @@
 	</td>
 	<td class="text-center"> 
 		<div class="m-btn-group m-btn-group--pill btn-group mr-2" role="group" aria-label="...">
-																		<button type="button"
-                                                                                class="m-btn btn btn-default"><i
-                                                                                class="fa fa-minus"></i></button>
-																		<button type="button"
-                                                                                class="m-btn btn btn-default"
-                                                                                disabled><span th:text="${item.quantity}"></span></button>
-																		<button type="button"
-                                                                                class="m-btn btn btn-default"><i
-                                                                                class="fa fa-plus"></i></button>
-																	</div>
+			<a th:href="@{/minus?pid={pid}(pid=${item.product.id})}" class="m-btn btn btn-default">
+                <i class="fa fa-minus"></i></a>
+			<button type="button" class="m-btn btn btn-default" disabled>
+                <span th:text="${item.quantity}"></span></button>
+			<a th:href="@{/plus?pid={pid}(pid=${item.product.id})}" class="m-btn btn btn-default">
+                <i class="fa fa-plus"></i></a>
+        </div>
 	</td>
 	<td> 
 		<div class="price-wrap"> 
@@ -169,7 +173,8 @@
 		</div> <!-- price-wrap .// -->
 	</td>
 	<td class="text-right"> 
-	<a href="" class="btn btn-outline-danger"> <i class="fa fa-trash"></i></a>
+	<a th:href="@{/delete?pid={pid}(pid=${item.product.id})}" class="btn btn-outline-danger"> <i
+            class="fa fa-trash"></i></a>
 	</td>
 </tr>
 </tbody>
@@ -187,19 +192,20 @@
                     </dl>
                     <dl class="dlist-align">
                         <dt>Sub Total:</dt>
-                        <dd class="text-right">$215</dd>
+                        <dd class="text-right" th:text="${cart.getTotal()}"></dd>
                     </dl>
                     <dl class="dlist-align">
                         <dt>Total:</dt>
-                        <dd class="text-right h4 b"> $215</dd>
+                        <dd class="text-right h4 b" th:text="${cart.getTotal()}*1.12"></dd>
                     </dl>
                     <div class="row">
                         <div class="col-md-6">
-                            <a href="#" class="btn  btn-default btn-error btn-lg btn-block"><i
+                            <a th:href="@{/cancel}" class="btn  btn-default btn-error btn-lg btn-block"><i
                                     class="fa fa-times-circle "></i> Cancel </a>
                         </div>
                         <div class="col-md-6">
-                            <a href="#" class="btn  btn-primary btn-lg btn-block"><i class="fa fa-shopping-bag"></i>
+                            <a th:href="@{/charge}" class="btn  btn-primary btn-lg btn-block"><i
+                                    class="fa fa-shopping-bag"></i>
                                 Charge </a>
                         </div>
                     </div>
@@ -226,6 +232,7 @@
         $("#cart").height(445);
         $("#cart").overlayScrollbars({});
     });
+
 </script>
 </body>
 </html>

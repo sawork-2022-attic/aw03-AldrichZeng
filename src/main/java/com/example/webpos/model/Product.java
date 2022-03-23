@@ -10,6 +10,7 @@ public class Product {
     private String name;
     private double price;
     private String image;
+    private String category;
 
     @Override
     public String toString() {

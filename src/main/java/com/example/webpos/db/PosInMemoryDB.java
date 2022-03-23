@@ -5,7 +5,9 @@ import com.example.webpos.model.Product;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class PosInMemoryDB implements PosDB {
@@ -40,15 +42,24 @@ public class PosInMemoryDB implements PosDB {
     }
 
     private PosInMemoryDB() {
-        this.products.add(new Product("PD1", "iPhone 13", 8999, "1.jpg"));
-        this.products.add(new Product("PD2", "MacBook Pro", 29499, "2.jpg"));
-        this.products.add(new Product("PD3", "MacBook Pro", 29499, "3.jpg"));
-        this.products.add(new Product("PD4", "MacBook Pro", 29499, "4.jpg"));
-        this.products.add(new Product("PD5", "MacBook Pro", 29499, "5.jpg"));
-        this.products.add(new Product("PD6", "MacBook Pro", 29499, "6.jpg"));
-        this.products.add(new Product("PD7", "MacBook Pro", 29499, "7.jpg"));
-        this.products.add(new Product("PD8", "MacBook Pro", 29499, "comp.png"));
+        // 已有的一些数据
+        this.products.add(new Product("PD1", "Iron", 8999, "1.jpg","home"));
+        this.products.add(new Product("PD2", "DianFanBao", 29499, "2.jpg","home"));
+        this.products.add(new Product("PD3", "Bag", 29499, "3.jpg","female"));
+        this.products.add(new Product("PD4", "Phone", 29499, "4.jpg","eletric"));
+        this.products.add(new Product("PD5", "Sofa", 29499, "5.jpg","relax"));
+        this.products.add(new Product("PD6", "Desk", 29499, "6.jpg","relax"));
+        this.products.add(new Product("PD7", "Watch", 29499, "7.jpg","eletric"));
+        this.products.add(new Product("PD8", "Monitor", 29499, "comp.png","eletric"));
 
+    }
+
+    public Set<String> categories(){
+        Set<String> set = new HashSet<>();
+        for(Product product:this.products){
+            set.add(product.getCategory());
+        }
+        return set;
     }
 
 }

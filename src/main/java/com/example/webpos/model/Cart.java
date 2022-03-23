@@ -14,6 +14,18 @@ public class Cart {
         return items.add(item);
     }
 
+
+    public double getTotal(){
+        if(items == null||items.size()==0){
+            return 0.0;
+        }
+        double sumOfTips = 0.0;
+        for(Item item:items){
+            sumOfTips += item.getProduct().getPrice() * item.getQuantity();
+
+        }
+        return sumOfTips;
+    }
     @Override
     public String toString() {
         if (items.size() ==0){
